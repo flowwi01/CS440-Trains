@@ -22,43 +22,44 @@ public class Main extends Controls{
 	private static PrintWriter out;
 	private static BufferedReader in;
 
-
+	public static initConnection client = new initConnection();
+	
+	
 	public static void main(String[] args) throws UnknownHostException, IOException {
 
 		//textInterface(); // used for testing purposes
 
-		initConnection client = new initConnection();
-
 
 		startConnection(IP, port); //replace string with "IP" and the second space with port number
 
-		String response = client.sendMessage("D1 28 FE 00 80 5A DF"); // here is where we can test commands
-
-		//creating an iterator here to go through feedback, finds end of file marker (DF) and starts a new line
+		String response = client.sendMessage("_____________"); // here is where we can test commands
 		
-		char tmp1 = ' '; 
-		char tmp2 = ' ';
-		for (int i = 0; i < response.length(); i++) {
-			if (response.charAt(i) <= ' ') {
-
-				if(i == 0) {
-					tmp1 = response.charAt(i);
-				}
-				else {
-					tmp1 = response.charAt(i);
-					tmp2 = response.charAt(i-1);
-				}
-			}
-			if (tmp1 == 'D' && tmp2 == 'F') {
-				System.out.println(tmp1);
-			}
-			else {
-				System.out.print(tmp1);
-			}
-
-			trainPtr train1 = new trainPtr ("Thomas", 10, "1", "L");
-		}
+		translateResp(response);
+		
+		//trainPtr train1 = new trainPtr ("Thomas", 10, "1", "L");
 	}
+	
+	public static void instructions() throws IOException, InterruptedException {
+		//translateResp(client.sendMessage( ____()));;
+		//translateResp(client.sendMessage(switchTrack(1))); // for when we are navigating the y track
+		
+		
+		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+		// go, stop, reverse, stop
+		translateResp(client.sendMessage(checkSensors()));
+		translateResp(client.sendMessage( Go()));
+		timeDelay(0,5);
+		translateResp(client.sendMessage(Stop()));
+		timeDelay(0,2);
+		translateResp(client.sendMessage(Reverse()));
+		timeDelay(0,5);
+		
+		
+		
+		
+	}
+	
+	
 	public static void textInterface() {
 
 		Scanner input = new Scanner(System.in);
@@ -98,6 +99,31 @@ public class Main extends Controls{
 
 	}
 
+	//iterator to decipher the responses, prints each character until it finds "DF" and then prints char and then new line. 
+	public static void translateResp(String response) {
+		
+		char tmp1 = ' '; 
+		char tmp2 = ' ';
+		
+		for (int i = 0; i < response.length(); i++) {
+			if (response.charAt(i) <= ' ') {
+
+				if(i == 0) {
+					tmp1 = response.charAt(i);
+				}
+				else {
+					tmp1 = response.charAt(i);
+					tmp2 = response.charAt(i-1);
+				}
+			}
+			if (tmp1 == 'D' && tmp2 == 'F') {
+				System.out.println(tmp1);
+			}
+			else {
+				System.out.print(tmp1);
+			}
+		}
+	}
 
 	static class initConnection {
 
@@ -130,7 +156,6 @@ public class Main extends Controls{
 			else {
 				out.println("unrecognised greeting");
 			}
-
 		}
 
 		public String sendMessage(String msg) throws IOException {
