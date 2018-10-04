@@ -1,7 +1,7 @@
 
 public class trainPtr{
 
-	// below variables come from locomotive data found on LCS PDI Command Ref.pdf page 17 ________________
+	// below variables come from locomotive data found on LCS PDI Command Ref.pdf page 17 _________________
 	
 	static String locoTyp; // 0 - 15, see page 13 of LCS PDI Command Ref.pdf
 	static String conTyp; // Cab1, TMCC, R100, Legacy
@@ -17,7 +17,7 @@ public class trainPtr{
 	static String ditLit; // Ditch Light operation control
 	static String trnBrk; // Train break setting
 
-	// ___________________________________________________________________________________________________
+	// ____________________________________________________________________________________________________
 	
 	static String name;
 	static String location;
