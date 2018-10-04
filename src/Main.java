@@ -23,8 +23,8 @@ public class Main extends Controls{
 	private static BufferedReader in;
 
 	public static initConnection client = new initConnection();
-	
-	
+
+
 	public static void main(String[] args) throws UnknownHostException, IOException {
 
 		//textInterface(); // used for testing purposes
@@ -33,33 +33,48 @@ public class Main extends Controls{
 		startConnection(IP, port); //replace string with "IP" and the second space with port number
 
 		String response = client.sendMessage("_____________"); // here is where we can test commands
-		
+
 		translateResp(response);
-		
-		//trainPtr train1 = new trainPtr ("Thomas", 10, "1", "L");
+		trainPtr train1 = new trainPtr ("Thomas", 10, "1", "L");
 	}
-	
-	public static void instructions() throws IOException, InterruptedException {
+
+	public static void instructions(trainPtr t) throws IOException, InterruptedException {
 		//translateResp(client.sendMessage( ____()));;
 		//translateResp(client.sendMessage(switchTrack(1))); // for when we are navigating the y track
-		
-		
-		//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+		//translateResp(client.sendMessage(checkSensors()));
+
+		//__________________________________________________________________
 		// go, stop, reverse, stop
-		translateResp(client.sendMessage(checkSensors()));
-		translateResp(client.sendMessage( Go()));
+		
+		translateResp(client.sendMessage( Go(t)));
 		timeDelay(0,5);
-		translateResp(client.sendMessage(Stop()));
+		translateResp(client.sendMessage(Stop(t)));
 		timeDelay(0,2);
-		translateResp(client.sendMessage(Reverse()));
+		translateResp(client.sendMessage(Reverse(t)));
 		timeDelay(0,5);
+		//__________________________________________________________________
+
+		//__________________________________________________________________
+		// go, stop, switch track, reverse, stop. AKA handling y track.
 		
-		
-		
-		
+		translateResp(client.sendMessage( Go(t)));
+		timeDelay(0,5);
+		translateResp(client.sendMessage(Stop(t)));
+		timeDelay(0,2);
+		translateResp(client.sendMessage(Reverse(t)));
+		timeDelay(0,5);
+		translateResp(client.sendMessage(Stop(t)));
+		timeDelay(0,2);
+		translateResp(client.sendMessage(switchTrack(1))); // for when we are navigating the y track
+		timeDelay(0,2);
+		translateResp(client.sendMessage(Reverse(t)));
+		timeDelay(0,5);
+		translateResp(client.sendMessage(Stop(t)));
+		//__________________________________________________________________
+
 	}
-	
-	
+
+
 	public static void textInterface() {
 
 		Scanner input = new Scanner(System.in);
@@ -101,10 +116,10 @@ public class Main extends Controls{
 
 	//iterator to decipher the responses, prints each character until it finds "DF" and then prints char and then new line. 
 	public static void translateResp(String response) {
-		
+
 		char tmp1 = ' '; 
 		char tmp2 = ' ';
-		
+
 		for (int i = 0; i < response.length(); i++) {
 			if (response.charAt(i) <= ' ') {
 
